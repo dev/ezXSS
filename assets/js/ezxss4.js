@@ -199,16 +199,30 @@ $(document).ready(function () {
     })
 
     $('.generate-password').click(function () {
-        var password = ''
-        const possible =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'
-
-        for (var i = 0; i < 20; i++) {
-            password += possible.charAt(Math.floor(Math.random() * possible.length))
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const numbers = '0123456789';
+        const symbols = '!@#$%^&*()_+';
+    
+        let password = [
+            uppercase[Math.floor(Math.random() * uppercase.length)],
+            lowercase[Math.floor(Math.random() * lowercase.length)],
+            numbers[Math.floor(Math.random() * numbers.length)],
+            symbols[Math.floor(Math.random() * symbols.length)]
+        ];
+    
+        const allCharacters = uppercase + lowercase + numbers + symbols;
+        while (password.length < 20) {
+            password.push(allCharacters[Math.floor(Math.random() * allCharacters.length)]);
         }
-
-        $('#password').val(password)
-    })
+    
+        for (let i = password.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [password[i], password[j]] = [password[j], password[i]];
+        }
+    
+        $('#password').val(password.join(''));
+    });
 
     $('.delete-selected').click(function () {
         $.each($("input[name='selected']:checked"), function () {
